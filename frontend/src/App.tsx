@@ -1,34 +1,45 @@
-import { useState } from "react";
+import HTMLFlipBook from "react-pageflip";
+import React, { useRef } from "react";
+import { useImagePreloader } from "./hooks/useImagePreloader";
 import { walvis } from "./data/walvisInDeTuin";
 
+const Page = React.forwardRef<HTMLDivElement, { src: string }>((props, ref) => {
+    return (
+        <div className="bg-black flex h-full w-full" ref={ref}>
+            <img
+                className="h-full object-fill pointer-events-none w-full"
+                src={props.src}
+            />
+        </div>
+    );
+});
+
 const App = () => {
-    const [currentSpread, setCurrentSpread] = useState(0);
+    const bookRef = useRef<any>(null);
+    const imagesLoaded = useImagePreloader(walvis);
 
-    const nextSpread = () => {
-        if (currentSpread < walvis.length - 1) {
-            setCurrentSpread((prev) => prev + 1);
-        }
-    };
-
-    const previousSpread = () => {
-        if (currentSpread > 0) {
-            setCurrentSpread((prev) => prev - 1);
-        }
-    };
+    if (!imagesLoaded) {
+        return (
+            <div className="bg-black flex h-screen items-center justify-center w-screen">
+                <div className="animate-spin border-[3px] border-t-white/80 border-white/10 h-24 rounded-full w-24" />
+            </div>
+        );
+    }
 
     return (
-        <div className="bg-black flex h-screen items-center justify-center w-screen">
-            <img
-                className="max-h-full object-contain"
-                key={currentSpread}
-                src={walvis[currentSpread]}
-            />
-            <div className="-translate-x-1/2 absolute bg-linear-to-r from-transparent inset-y-0 left-1/2 pointer-events-none to-transparent via-black/20 w-15 z-10" />
-
-            <div className="absolute flex inset-0">
-                <button className="h-full w-1/2" onClick={previousSpread} />
-                <button className="h-full w-1/2" onClick={nextSpread} />
-            </div>
+        <div className="bg-black flex flex-col h-screen items-center justify-center overflow-hidden w-screen">
+            {/* @ts-ignore */}
+            <HTMLFlipBook
+                height={3661}
+                ref={bookRef}
+                showCover={false}
+                size="stretch"
+                width={3012}
+            >
+                {walvis.map((src, i) => (
+                    <Page key={i} src={src} />
+                ))}
+            </HTMLFlipBook>
         </div>
     );
 };
