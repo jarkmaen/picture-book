@@ -30,11 +30,11 @@ const App = () => {
         <div className="bg-black flex flex-col h-screen items-center justify-center overflow-hidden w-screen">
             {/* @ts-ignore */}
             <HTMLFlipBook
-                height={3661}
+                height={1600}
                 ref={bookRef}
                 showCover={false}
                 size="stretch"
-                width={3012}
+                width={1316}
             >
                 {walvis.map((src, i) => (
                     <Page key={i} src={src} />
