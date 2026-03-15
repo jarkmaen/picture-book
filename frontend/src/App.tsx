@@ -1,20 +1,10 @@
 import BackButton from "./components/BackButton";
 import FullscreenButton from "./components/FullscreenButton";
 import HTMLFlipBook from "react-pageflip";
-import React, { useEffect, useRef, useState } from "react";
+import Page from "./components/Page";
+import { useEffect, useRef, useState } from "react";
 import { useImagePreloader } from "./hooks/useImagePreloader";
 import { walvis } from "./data/walvisInDeTuin";
-
-const Page = React.forwardRef<HTMLDivElement, { src: string }>((props, ref) => {
-    return (
-        <div className="bg-black flex h-full w-full" ref={ref}>
-            <img
-                className="h-full object-fill pointer-events-none w-full"
-                src={props.src}
-            />
-        </div>
-    );
-});
 
 const App = () => {
     const [isFullscreen, setIsFullscreen] = useState(false);
