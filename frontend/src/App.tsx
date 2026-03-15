@@ -1,3 +1,4 @@
+import BackButton from "./components/BackButton";
 import FullscreenButton from "./components/FullscreenButton";
 import HTMLFlipBook from "react-pageflip";
 import React, { useEffect, useRef, useState } from "react";
@@ -46,6 +47,7 @@ const App = () => {
             className="bg-black flex flex-col h-screen items-center justify-center overflow-hidden w-screen"
             ref={containerRef}
         >
+            <BackButton />
             <FullscreenButton
                 containerRef={containerRef}
                 isFullscreen={isFullscreen}
