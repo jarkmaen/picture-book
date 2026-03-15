@@ -1,5 +1,6 @@
+import FullscreenButton from "./components/FullscreenButton";
 import HTMLFlipBook from "react-pageflip";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useImagePreloader } from "./hooks/useImagePreloader";
 import { walvis } from "./data/walvisInDeTuin";
 
@@ -15,8 +16,22 @@ const Page = React.forwardRef<HTMLDivElement, { src: string }>((props, ref) => {
 });
 
 const App = () => {
+    const [isFullscreen, setIsFullscreen] = useState(false);
+
     const bookRef = useRef<any>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
     const imagesLoaded = useImagePreloader(walvis);
+
+    useEffect(() => {
+        const handleChange = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+        };
+
+        document.addEventListener("fullscreenchange", handleChange);
+
+        return () =>
+            document.removeEventListener("fullscreenchange", handleChange);
+    }, []);
 
     if (!imagesLoaded) {
         return (
@@ -27,7 +42,14 @@ const App = () => {
     }
 
     return (
-        <div className="bg-black flex flex-col h-screen items-center justify-center overflow-hidden w-screen">
+        <div
+            className="bg-black flex flex-col h-screen items-center justify-center overflow-hidden w-screen"
+            ref={containerRef}
+        >
+            <FullscreenButton
+                containerRef={containerRef}
+                isFullscreen={isFullscreen}
+            />
             {/* @ts-ignore */}
             <HTMLFlipBook
                 height={1600}
