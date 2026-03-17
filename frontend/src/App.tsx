@@ -7,11 +7,30 @@ import { useImagePreloader } from "./hooks/useImagePreloader";
 import { walvis } from "./data/walvisInDeTuin";
 
 const App = () => {
+    const [containerWidth, setContainerWidth] = useState<string>("100%");
     const [isFullscreen, setIsFullscreen] = useState(false);
 
     const bookRef = useRef<any>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const imagesLoaded = useImagePreloader(walvis);
+
+    useEffect(() => {
+        const handleResize = () => {
+            const width = window.innerWidth;
+
+            if (width % 2 === 0) {
+                setContainerWidth("100vw");
+            } else {
+                setContainerWidth(`${width - 1}px`);
+            }
+        };
+
+        window.addEventListener("resize", handleResize);
+
+        handleResize();
+
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
 
     useEffect(() => {
         const handleChange = () => {
@@ -42,18 +61,20 @@ const App = () => {
                 containerRef={containerRef}
                 isFullscreen={isFullscreen}
             />
-            {/* @ts-ignore */}
-            <HTMLFlipBook
-                height={1600}
-                ref={bookRef}
-                showCover={false}
-                size="stretch"
-                width={1316}
-            >
-                {walvis.map((src, i) => (
-                    <Page key={i} src={src} />
-                ))}
-            </HTMLFlipBook>
+            <div style={{ width: containerWidth }}>
+                {/* @ts-ignore */}
+                <HTMLFlipBook
+                    height={1600}
+                    ref={bookRef}
+                    showCover={false}
+                    size="stretch"
+                    width={1316}
+                >
+                    {walvis.map((src, i) => (
+                        <Page key={i} src={src} />
+                    ))}
+                </HTMLFlipBook>
+            </div>
         </div>
     );
 };
