@@ -1,4 +1,5 @@
 from PIL import Image
+from PIL import ImageFilter
 import fitz
 import numpy as np
 import pathlib
@@ -13,7 +14,7 @@ def apply_gutter(input_folder, output_folder, noise_intensity):
     images = list(input_folder.glob("*.webp"))
 
     is_left_page = True
-    max_alpha = 0.38
+    max_alpha = 0.35
 
     for i in images:
         with Image.open(i).convert("RGBA") as img:
@@ -23,12 +24,14 @@ def apply_gutter(input_folder, output_folder, noise_intensity):
             alpha_map = np.zeros((height, width), dtype=np.float32)
 
             if is_left_page:
-                gutter_width = int(width * 0.05)
-                gradient = np.linspace(0, max_alpha, gutter_width)
+                gutter_width = int(width * 0.08)
+                line = np.linspace(0, 1, gutter_width)
+                gradient = np.power(line, 2) * max_alpha
                 alpha_map[:, width - gutter_width :] = gradient
             else:
-                gutter_width = int(width * 0.11)
-                gradient = np.linspace(max_alpha * 0.8, 0, gutter_width)
+                gutter_width = int(width * 0.15)
+                line = np.linspace(1, 0, gutter_width)
+                gradient = np.power(line, 2) * (max_alpha * 0.8)
                 alpha_map[:, :gutter_width] = gradient
 
             noise = np.random.uniform(1 - noise_intensity, 1 + noise_intensity, (height, width))
@@ -37,7 +40,9 @@ def apply_gutter(input_folder, output_folder, noise_intensity):
             alpha_bytes = (alpha_map * 255).astype(np.uint8)
             overlay_data = np.zeros((height, width, 4), dtype=np.uint8)
             overlay_data[:, :, 3] = alpha_bytes
+
             gutter_overlay = Image.fromarray(overlay_data, "RGBA")
+            gutter_overlay = gutter_overlay.filter(ImageFilter.GaussianBlur(radius=3))
 
             output_path = output_folder / i.name
 
@@ -111,7 +116,7 @@ def main():
     pdf_to_images(input_file, extracted_dir)
     compress_to_webp(extracted_dir, compressed_dir, 75)
     split_images(compressed_dir, splitted_dir)
-    apply_gutter(splitted_dir, guttered_dir, 0.24)
+    apply_gutter(splitted_dir, guttered_dir, 0.12)
 
 
 if __name__ == "__main__":
