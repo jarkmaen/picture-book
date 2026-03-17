@@ -1,26 +1,22 @@
 import { useEffect, useState } from "react";
 
 export const useImagePreloader = (images: string[]) => {
-    const [imagesLoaded, setImagesLoaded] = useState(false);
+    const [loadedCount, setLoadedCount] = useState(0);
 
     useEffect(() => {
-        const promises = images.map((src) => {
-            return new Promise((resolve) => {
-                const img = new Image();
+        images.forEach((src) => {
+            const img = new Image();
 
-                img.src = src;
+            img.src = src;
 
-                img.decode()
-                    .then(() => resolve(src))
-                    .catch(() => {
-                        img.onerror = resolve;
-                        img.onload = resolve;
-                    });
-            });
+            img.decode()
+                .then(() => setLoadedCount((prev) => prev + 1))
+                .catch(() => setLoadedCount((prev) => prev + 1));
         });
-
-        Promise.all(promises).then(() => setImagesLoaded(true));
     }, [images]);
 
-    return imagesLoaded;
+    const isLoading = loadedCount < images.length;
+    const percentage = Math.round((loadedCount / images.length) * 100);
+
+    return { isLoading, percentage };
 };
