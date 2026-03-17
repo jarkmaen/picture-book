@@ -1,0 +1,18 @@
+import { useEffect, useState } from "react";
+
+export const useFullscreenState = () => {
+    const [isFullscreen, setIsFullscreen] = useState(false);
+
+    useEffect(() => {
+        const handleChange = () => {
+            setIsFullscreen(!!document.fullscreenElement);
+        };
+
+        document.addEventListener("fullscreenchange", handleChange);
+
+        return () =>
+            document.removeEventListener("fullscreenchange", handleChange);
+    }, []);
+
+    return isFullscreen;
+};

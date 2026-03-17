@@ -2,46 +2,18 @@ import BackButton from "./components/BackButton";
 import FullscreenButton from "./components/FullscreenButton";
 import HTMLFlipBook from "react-pageflip";
 import Page from "./components/Page";
-import { useEffect, useRef, useState } from "react";
+import { useEvenWidth } from "./hooks/useEvenWidth";
+import { useFullscreenState } from "./hooks/useFullscreenState";
 import { useImagePreloader } from "./hooks/useImagePreloader";
+import { useRef } from "react";
 import { walvis } from "./data/walvisInDeTuin";
 
 const App = () => {
-    const [containerWidth, setContainerWidth] = useState<string>("100%");
-    const [isFullscreen, setIsFullscreen] = useState(false);
-
     const bookRef = useRef<any>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const imagesLoaded = useImagePreloader(walvis);
-
-    useEffect(() => {
-        const handleResize = () => {
-            const width = window.innerWidth;
-
-            if (width % 2 === 0) {
-                setContainerWidth("100vw");
-            } else {
-                setContainerWidth(`${width - 1}px`);
-            }
-        };
-
-        window.addEventListener("resize", handleResize);
-
-        handleResize();
-
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
-    useEffect(() => {
-        const handleChange = () => {
-            setIsFullscreen(!!document.fullscreenElement);
-        };
-
-        document.addEventListener("fullscreenchange", handleChange);
-
-        return () =>
-            document.removeEventListener("fullscreenchange", handleChange);
-    }, []);
+    const isFullscreen = useFullscreenState();
+    const width = useEvenWidth();
 
     if (!imagesLoaded) {
         return (
@@ -61,7 +33,7 @@ const App = () => {
                 containerRef={containerRef}
                 isFullscreen={isFullscreen}
             />
-            <div style={{ width: containerWidth }}>
+            <div style={{ width: width }}>
                 {/* @ts-ignore */}
                 <HTMLFlipBook
                     height={1600}
