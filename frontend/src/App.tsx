@@ -30,20 +30,19 @@ const App = () => {
                 containerRef={containerRef}
                 isFullscreen={isFullscreen}
             />
-            <div style={{ width: width }}>
-                {/* @ts-ignore */}
-                <HTMLFlipBook
-                    height={1600}
-                    ref={bookRef}
-                    showCover={false}
-                    size="stretch"
-                    width={1316}
-                >
-                    {walvis.map((src, i) => (
-                        <Page key={i} src={src} />
-                    ))}
-                </HTMLFlipBook>
-            </div>
+            {/* @ts-ignore */}
+            <HTMLFlipBook
+                height={1600}
+                ref={bookRef}
+                showCover={false}
+                size="stretch"
+                style={{ width: width }}
+                width={1316}
+            >
+                {walvis.map((src, i) => (
+                    <Page key={i} src={src} />
+                ))}
+            </HTMLFlipBook>
         </div>
     );
 };
