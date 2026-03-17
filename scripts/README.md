@@ -14,14 +14,15 @@ $ python -m venv venv
 $ source venv/bin/activate
 
 # Install dependencies
-$ pip install pillow pymupdf
+$ pip install numpy pillow pymupdf
 
 # Run data preprocessing script
 $ python preprocess_data.py
 ```
 
-This will create the output folder with three folders inside it:
+This will create the output folder with four folders inside it:
 
 - `compressed`: Contains the PNG files converted to WebP to reduce file size.
 - `extracted`: Contains the raw spreads extracted from the PDF as PNG files.
-- `splitted`: Contains the final output where each WebP spread is cut down the middle into two individual pages.
+- `guttered`: Contains the individual pages with a book fold shadow effect applied to the inner edges.
+- `splitted`: Contains the WebP spreads cut down the middle into individual left and right pages.
