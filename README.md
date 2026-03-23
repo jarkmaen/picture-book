@@ -2,7 +2,7 @@
 
 ## Overview
 
-A digital picture book web application built for [flyonthewall.be](https://flyonthewall.be). All illustrations and assets are created by flyonthewall.be.
+A digital picture book web application built for [flyonthewall.be](https://flyonthewall.be). All illustrations and assets created by **Fly on the Wall**.
 
 View the application here: [jarkmaen.github.io/picture-book](https://jarkmaen.github.io/picture-book)
 

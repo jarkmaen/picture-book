@@ -7,10 +7,10 @@ Instructions for preparing the data. The preprocess_data.py script processes the
 To run the following commands below, you'll need to have [Python](https://www.python.org/) installed on your computer. Open your terminal in this directory and run:
 
 ```
-# Create virtual environment
+# Create a virtual environment
 $ python -m venv venv
 
-# Activate venv
+# Activate the virtual environment
 $ source venv/bin/activate
 
 # Install dependencies
@@ -22,7 +22,7 @@ $ python preprocess_data.py
 
 This will create the output folder with four folders inside it:
 
-- `compressed`: Contains the PNG files converted to WebP to reduce file size.
 - `extracted`: Contains the raw spreads extracted from the PDF as PNG files.
-- `guttered`: Contains the individual pages with a book fold shadow effect applied to the inner edges.
-- `splitted`: Contains the WebP spreads cut down the middle into individual left and right pages.
+- `compressed`: Contains the PNG files converted to WebP to reduce file size.
+- `splitted`: Contains the WebP spreads split into individual left and right pages.
+- `guttered`: Contains the individual pages with a book fold effect applied.
