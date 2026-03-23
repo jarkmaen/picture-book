@@ -32,12 +32,12 @@ const App = () => {
             />
             {/* @ts-ignore */}
             <HTMLFlipBook
-                height={1600}
+                height={1758}
                 ref={bookRef}
                 showCover={false}
                 size="stretch"
                 style={{ width: width }}
-                width={1316}
+                width={1446}
             >
                 {walvis.map((src, i) => (
                     <Page key={i} src={src} />
